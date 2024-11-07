@@ -1,0 +1,40 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Google Sheets Search</title>
+</head>
+<body>
+  <h1>Search Products</h1>
+  <input type="text" id="searchInput" placeholder="Search...">
+  <button onclick="searchData()">Search</button>
+  <div id="results"></div>
+
+  <script>
+    function searchData() {
+      var query = document.getElementById('searchInput').value;
+      fetch('https://script.google.com/macros/s/AKfycbwJX8Ua2_xV4ppbLnXGBkToB0vpe3LAEB_4zNkwjbOmv5H7kRaDGdZ_H3_FebR5-puZ/exec')
+        .then(response => response.json())
+        .then(data => {
+          var results = data.filter(row => {
+            return row.Product.includes(query);
+          });
+          displayResults(results);
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    function displayResults(results) {
+      var resultsDiv = document.getElementById('results');
+      resultsDiv.innerHTML = '';
+      results.forEach(row => {
+        var rowDiv = document.createElement('div');
+        rowDiv.textContent = `Product: ${row.Product}, Price: ${row.Price}`;
+        resultsDiv.appendChild(rowDiv);
+      });
+    }
+  </script>
+</body>
+</html>
